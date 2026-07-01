@@ -27,61 +27,42 @@ npm run build
 npm run preview
 ```
 
-Set your public URL for canonical and Open Graph tags:
+Set your public URL after the first deploy (free `*.workers.dev` link from Cloudflare):
 
 ```bash
 cp .env.example .env
-# VITE_SITE_URL=https://alema.dev
+# VITE_SITE_URL=https://alema-em-portfolio.<your-account>.workers.dev
 ```
 
-## Deploy (Cloudflare + alema.dev)
+## Deploy (free — Cloudflare Workers)
 
-This site targets **Cloudflare Workers** (`cloudflare-module` preset). Recommended setup:
+No domain purchase needed. Cloudflare gives you a free `*.workers.dev` URL.
 
-### 1. Get the domain
-
-Register **alema.dev** at [Cloudflare Registrar](https://dash.cloudflare.com/?to=/:account/domains/register) (or any registrar). If you buy elsewhere, add the domain to Cloudflare and point its nameservers to Cloudflare.
-
-### 2. One-time Cloudflare login
+### One-time setup
 
 ```bash
 npx wrangler login
-```
-
-### 3. Deploy from your machine
-
-```bash
 cp .env.example .env
 npm install
 npm run deploy
 ```
 
-This builds the site and publishes to Cloudflare. You’ll get a `*.workers.dev` URL first.
+After deploy, Cloudflare prints your live URL. Paste it into `.env` as `VITE_SITE_URL`, update `public/sitemap.xml` if you care about SEO, then run `npm run deploy` once more.
 
-### 4. Attach alema.dev
+### Auto-deploy on git push (optional, still free)
 
-In [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **alema-em-portfolio** → **Settings** → **Domains & Routes**:
-
-- Add **alema.dev**
-- Optionally add **www.alema.dev** and set a redirect to `https://alema.dev`
-
-`VITE_SITE_URL` must be `https://alema.dev` in `.env` **before** you run `npm run deploy` so OG tags and canonical URLs are correct.
-
-### Auto-deploy on git push (optional)
-
-Connect **Alema-em/Portfolio** in **Workers & Pages** → **Create** → **Workers** → **Import a repository**, then set:
+In [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → connect **Alema-em/Portfolio**:
 
 | Setting | Value |
 |--------|--------|
 | Build command | `npm run build` |
 | Deploy command | `npx nitro deploy --prebuilt` |
-| Environment variable | `VITE_SITE_URL=https://alema.dev` |
 
-Future pushes to `master` will redeploy automatically.
+Set `VITE_SITE_URL` to your `*.workers.dev` URL in the project environment variables after the first successful deploy.
 
-## Deploy (other hosts)
+## Other free hosts
 
-Adjust the Nitro preset in `vite.config.ts` (e.g. `vercel`, `netlify`).
+Vercel (`*.vercel.app`) and Netlify (`*.netlify.app`) also have free tiers, but you’d change the Nitro preset in `vite.config.ts`. Cloudflare is already configured — stick with it for zero cost and zero config changes.
 
 ## Asset scripts
 
