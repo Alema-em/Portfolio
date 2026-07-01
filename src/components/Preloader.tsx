@@ -147,8 +147,8 @@ export function Preloader() {
           />
 
           <div className="relative z-10 flex h-full min-h-0 flex-col px-3 pb-[max(0.85rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] sm:px-4 sm:pb-6 sm:pt-10">
-            <div className="flex min-h-0 flex-1 items-center justify-center max-sm:py-2 sm:py-2">
-              <div className="relative h-[min(68svh,calc(100vw-1.25rem))] w-[calc(100vw-1.25rem)] max-w-[520px] sm:h-full sm:w-full">
+            <div className="flex min-h-0 flex-1 items-center justify-center max-sm:py-2">
+              <div className="relative h-full w-full max-sm:h-[min(68svh,calc(100vw-1.25rem))] max-sm:w-[calc(100vw-1.25rem)] max-sm:max-w-[520px]">
                 <PreloaderAssembly progress={progress} phase={phase} reduceMotion={!!reduce} />
               </div>
             </div>

@@ -290,7 +290,7 @@ export function PreloaderAssembly({ progress, phase, reduceMotion }: PreloaderAs
             />
 
             <div
-              className="relative flex h-[min(11.5rem,42vw)] w-[min(11.5rem,42vw)] flex-col items-center justify-center rounded-2xl border-[3px] border-[var(--paper)] shadow-[7px_7px_0_0_var(--lime)] sm:h-44 sm:w-44 sm:shadow-[8px_8px_0_0_var(--lime)] md:h-44 md:w-44"
+              className="relative flex h-44 w-44 flex-col items-center justify-center rounded-2xl border-[3px] border-[var(--paper)] shadow-[8px_8px_0_0_var(--lime)] max-sm:h-[min(11.5rem,42vw)] max-sm:w-[min(11.5rem,42vw)] max-sm:shadow-[7px_7px_0_0_var(--lime)]"
               style={{
                 background: "linear-gradient(145deg, #8b6dff 0%, #5a3eea 55%, #4a32c4 100%)",
               }}
