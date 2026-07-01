@@ -30,7 +30,7 @@ export const PROJECTS: Project[] = [
     ink: "ink",
     role: "Full-stack engineering · AI pipelines & UI",
     stack: ["Python", "Flask", "Ollama", "Vanilla JS"],
-    brief: "Founders needed on-brand identity direction fast, without long agency cycles.",
+    brief: "Founders need usable brand assets fast not weeks-long agency process.",
     outcome:
       "Built an end-to-end AI brand workflow that turns a one-line prompt into a production-ready identity kit in minutes.",
     bullets: [
