@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Alema Emran portfolio">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5F1EA"/>
+      <stop offset="55%" stop-color="#E8D4FF"/>
+      <stop offset="100%" stop-color="#FFF3B0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="48" y="48" width="1104" height="534" rx="32" fill="none" stroke="#1A1A1A" stroke-width="4"/>
+  <circle cx="120" cy="120" r="44" fill="#2B4BFF" stroke="#1A1A1A" stroke-width="3"/>
+  <text x="120" y="132" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#F5F1EA">AE</text>
+  <text x="96" y="248" font-family="Georgia, serif" font-size="72" font-weight="400" fill="#1A1A1A">Alema Emran</text>
+  <text x="96" y="330" font-family="system-ui, sans-serif" font-size="34" fill="#1A1A1A" opacity="0.82">Full-stack software engineer</text>
+  <text x="96" y="392" font-family="system-ui, sans-serif" font-size="28" fill="#1A1A1A" opacity="0.7">Backends, APIs, systems, and interfaces.</text>
+  <rect x="96" y="456" width="280" height="64" rx="32" fill="#1A1A1A"/>
+  <text x="236" y="498" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#F5F1EA">alemaemran@gmail.com</text>
+</svg>

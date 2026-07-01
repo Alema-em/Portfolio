@@ -1,0 +1,92 @@
+{
+  "frameWidth": 180,
+  "frameHeight": 262,
+  "defaultFps": 8,
+  "defaultScale": 0.1,
+  "animations": {
+    "celebrate": {
+      "sheet": "celebrate.png",
+      "frames": 3,
+      "frameWidth": 259,
+      "frameHeight": 321,
+      "loop": false
+    },
+    "coffee": {
+      "sheet": "coffee.png",
+      "frames": 3,
+      "frameWidth": 190,
+      "frameHeight": 255,
+      "loop": true
+    },
+    "idle": {
+      "sheet": "idle.png",
+      "frames": 4,
+      "frameWidth": 271,
+      "frameHeight": 400,
+      "loop": true
+    },
+    "peek": {
+      "sheet": "peek.png",
+      "frames": 2,
+      "frameWidth": 153,
+      "frameHeight": 267,
+      "loop": false
+    },
+    "point": {
+      "sheet": "point.png",
+      "frames": 1,
+      "frameWidth": 277,
+      "frameHeight": 400,
+      "loop": true
+    },
+    "sit": {
+      "sheet": "sit.png",
+      "frames": 1,
+      "frameWidth": 277,
+      "frameHeight": 400,
+      "loop": true
+    },
+    "sleep": {
+      "sheet": "sleep.png",
+      "frames": 1,
+      "frameWidth": 692,
+      "frameHeight": 400,
+      "loop": true
+    },
+    "thinking": {
+      "sheet": "thinking.png",
+      "frames": 2,
+      "frameWidth": 234,
+      "frameHeight": 278,
+      "loop": true
+    },
+    "typing": {
+      "sheet": "typing.png",
+      "frames": 4,
+      "frameWidth": 256,
+      "frameHeight": 275,
+      "loop": true
+    },
+    "walk-left": {
+      "sheet": "walk-left.png",
+      "frames": 6,
+      "frameWidth": 317,
+      "frameHeight": 400,
+      "loop": true
+    },
+    "walk-right": {
+      "sheet": "walk-right.png",
+      "frames": 6,
+      "frameWidth": 320,
+      "frameHeight": 400,
+      "loop": true
+    },
+    "wave": {
+      "sheet": "wave.png",
+      "frames": 4,
+      "frameWidth": 180,
+      "frameHeight": 262,
+      "loop": false
+    }
+  }
+}

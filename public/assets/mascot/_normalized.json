@@ -1,0 +1,47 @@
+{
+  "idle": {
+    "frames": 4,
+    "frameWidth": 271,
+    "frameHeight": 400
+  },
+  "walk-right": {
+    "frames": 6,
+    "frameWidth": 320,
+    "frameHeight": 400
+  },
+  "walk-left": {
+    "frames": 6,
+    "frameWidth": 317,
+    "frameHeight": 400
+  },
+  "typing": {
+    "frames": 4,
+    "frameWidth": 256,
+    "frameHeight": 275
+  },
+  "wave": {
+    "frames": 4,
+    "frameWidth": 180,
+    "frameHeight": 262
+  },
+  "coffee": {
+    "frames": 3,
+    "frameWidth": 190,
+    "frameHeight": 255
+  },
+  "celebrate": {
+    "frames": 3,
+    "frameWidth": 259,
+    "frameHeight": 321
+  },
+  "peek": {
+    "frames": 2,
+    "frameWidth": 153,
+    "frameHeight": 267
+  },
+  "thinking": {
+    "frames": 2,
+    "frameWidth": 234,
+    "frameHeight": 278
+  }
+}
