@@ -14,6 +14,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
+    "deploy": "vite build && nitro deploy --prebuilt",
     "lint": "eslint .",
     "format": "prettier --write .",
     "capture:plant": "node scripts/capture-plant-login.mjs",

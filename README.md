@@ -31,14 +31,57 @@ Set your public URL for canonical and Open Graph tags:
 
 ```bash
 cp .env.example .env
-# VITE_SITE_URL=https://your-domain.com
+# VITE_SITE_URL=https://alema.dev
 ```
 
-## Deploy
+## Deploy (Cloudflare + alema.dev)
 
-The build targets **Cloudflare Workers** (`cloudflare-module` preset). After `npm run build`, deploy the `.output` directory with Wrangler or connect the repo to Cloudflare Pages.
+This site targets **Cloudflare Workers** (`cloudflare-module` preset). Recommended setup:
 
-For other hosts, adjust the Nitro preset in `vite.config.ts`.
+### 1. Get the domain
+
+Register **alema.dev** at [Cloudflare Registrar](https://dash.cloudflare.com/?to=/:account/domains/register) (or any registrar). If you buy elsewhere, add the domain to Cloudflare and point its nameservers to Cloudflare.
+
+### 2. One-time Cloudflare login
+
+```bash
+npx wrangler login
+```
+
+### 3. Deploy from your machine
+
+```bash
+cp .env.example .env
+npm install
+npm run deploy
+```
+
+This builds the site and publishes to Cloudflare. You’ll get a `*.workers.dev` URL first.
+
+### 4. Attach alema.dev
+
+In [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **alema-em-portfolio** → **Settings** → **Domains & Routes**:
+
+- Add **alema.dev**
+- Optionally add **www.alema.dev** and set a redirect to `https://alema.dev`
+
+`VITE_SITE_URL` must be `https://alema.dev` in `.env` **before** you run `npm run deploy` so OG tags and canonical URLs are correct.
+
+### Auto-deploy on git push (optional)
+
+Connect **Alema-em/Portfolio** in **Workers & Pages** → **Create** → **Workers** → **Import a repository**, then set:
+
+| Setting | Value |
+|--------|--------|
+| Build command | `npm run build` |
+| Deploy command | `npx nitro deploy --prebuilt` |
+| Environment variable | `VITE_SITE_URL=https://alema.dev` |
+
+Future pushes to `master` will redeploy automatically.
+
+## Deploy (other hosts)
+
+Adjust the Nitro preset in `vite.config.ts` (e.g. `vercel`, `netlify`).
 
 ## Asset scripts
 
