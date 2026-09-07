@@ -1340,7 +1340,7 @@ const DEPLOYMENTS: Deployment[] = [
     id: "DEP-007",
     org: "Axiomaera",
     role: "Digital Media & Marketing Lead",
-    duration: "February 2026 — Present",
+    duration: "February 2026 — August 2026",
     status: "ACTIVE",
     accent: "lime",
     bullets: [
