@@ -54,6 +54,8 @@ export default defineConfig(({ mode, command }) => {
         ? [
             nitro({
               defaultPreset: "cloudflare-module",
+              // Pin so deploys don't fail when Nitro picks "today" ahead of Cloudflare's clock
+              compatibilityDate: "2026-07-01",
             }),
           ]
         : []),
