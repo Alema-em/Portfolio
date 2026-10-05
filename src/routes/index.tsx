@@ -1337,6 +1337,62 @@ type Deployment = {
 
 const DEPLOYMENTS: Deployment[] = [
   {
+    id: "DEP-011",
+    org: "BTF",
+    role: "Events Head",
+    duration: "August 2026 — Present",
+    status: "ACTIVE",
+    accent: "lime",
+    bullets: [
+      "Leading end-to-end event planning for campus tech programming.",
+      "Coordinating ops, creative and logistics across live event cycles.",
+      "Keeping schedules tight while scaling volunteer execution.",
+    ],
+    tools: "Notion · Figma · Canva · CapCut",
+  },
+  {
+    id: "DEP-010",
+    org: "Cyberthorn",
+    role: "Events Co-Lead",
+    duration: "September 2026 — Present",
+    status: "ACTIVE",
+    accent: "coral",
+    bullets: [
+      "Co-leading cyber-community events from brief to show day.",
+      "Aligning speakers, workshops and engagement touchpoints.",
+      "Supporting fast turnarounds across promo and operations.",
+    ],
+    tools: "Canva · Figma · Notion · CapCut",
+  },
+  {
+    id: "DEP-009",
+    org: "AGCOE",
+    role: "Research Lead — Blockchain",
+    duration: "September 2026 — Present",
+    status: "ACTIVE",
+    accent: "butter",
+    bullets: [
+      "Leading blockchain research direction for the AGCOE cohort.",
+      "Structuring research goals, reviews and knowledge sharing.",
+      "Bridging technical exploration with practical campus projects.",
+    ],
+    tools: "Research · Documentation · Prototyping",
+  },
+  {
+    id: "DEP-008",
+    org: "BITS Sports Fest",
+    role: "Digital & Creative Board Head",
+    duration: "September 2026 — Present",
+    status: "ACTIVE",
+    accent: "cobalt",
+    bullets: [
+      "Heading digital and creative board output for sports fest.",
+      "Directing brand systems across campaigns, media and on-ground.",
+      "Aligning designers under high-visibility festival deadlines.",
+    ],
+    tools: "Figma · Illustrator · Photoshop · After Effects · Canva",
+  },
+  {
     id: "DEP-007",
     org: "Axiomaera",
     role: "Digital Media & Marketing Lead",
