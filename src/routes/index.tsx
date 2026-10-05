@@ -1348,7 +1348,7 @@ const DEPLOYMENTS: Deployment[] = [
       "Coordinating ops, creative and logistics across live event cycles.",
       "Keeping schedules tight while scaling volunteer execution.",
     ],
-    tools: "Notion · Figma · Canva · CapCut",
+    tools: "Discord · Google Forms · Sheets · Instagram · Canva",
   },
   {
     id: "DEP-010",
@@ -1362,7 +1362,7 @@ const DEPLOYMENTS: Deployment[] = [
       "Aligning speakers, workshops and engagement touchpoints.",
       "Supporting fast turnarounds across promo and operations.",
     ],
-    tools: "Canva · Figma · Notion · CapCut",
+    tools: "Discord · CTFd · LinkedIn · Canva · CapCut",
   },
   {
     id: "DEP-009",
