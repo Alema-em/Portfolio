@@ -1,7 +1,7 @@
 export const CONTACT = {
   email: "alemaemran@gmail.com",
-  cvUrl: "/Alema_CV.pdf",
-  cvFilename: "Alema_Emran_CV.pdf",
+  cvUrl: "/Alema-Emran-CV.pdf",
+  cvFilename: "Alema-Emran-CV.pdf",
   linkedin: "https://www.linkedin.com/in/alemaemran",
   github: "https://github.com/Alema-em",
   phoneIndia: {
