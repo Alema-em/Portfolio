@@ -1543,7 +1543,7 @@ function DeploymentLog() {
             </p>
           </div>
           <div className="font-mono text-xs uppercase tracking-widest bg-[var(--paper)] text-[var(--ink)] px-3 py-1.5 border-2 border-[var(--lime)]">
-            7 Logged · Building
+            {DEPLOYMENTS.length} Logged · Building
           </div>
         </div>
 
@@ -1678,7 +1678,7 @@ function DeploymentLog() {
         </div>
 
         <div className="mt-14 font-mono text-[10px] uppercase tracking-widest text-[var(--paper)]/45 text-center">
-          7 deployments logged · end of transmission
+          {DEPLOYMENTS.length} deployments logged · end of transmission
         </div>
       </div>
     </SectionReveal>
