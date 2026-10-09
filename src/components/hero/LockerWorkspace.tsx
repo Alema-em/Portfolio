@@ -69,11 +69,11 @@ export function LockerWorkspace() {
     >
       <figure className="absolute inset-0 m-0">
         {/* locker */}
-        <Layer src={`${A}/locker.png`} alt="" z={0} style={figma(-273, 3, 1688, 1125)} />
+        <Layer src={`${A}/locker.webp`} alt="" z={0} style={figma(-273, 3, 1688, 1125)} />
 
         {/* locker door */}
         <Layer
-          src={`${A}/lockerdoor.png`}
+          src={`${A}/lockerdoor.webp`}
           alt=""
           z={1}
           style={figma(684, 13, 751, 1126)}
@@ -83,7 +83,7 @@ export function LockerWorkspace() {
 
         {/* current builds */}
         <Layer
-          src={`${A}/current-builds.png`}
+          src={`${A}/current-builds.webp`}
           alt="Current builds"
           z={2}
           style={figma(48, 318, 613, 409)}
@@ -91,7 +91,7 @@ export function LockerWorkspace() {
 
         {/* stickynote 1 */}
         <Layer
-          src={`${A}/stickynote.png`}
+          src={`${A}/stickynote.webp`}
           alt="Sticky note"
           z={3}
           style={figma(374, 326, 376, 251)}
@@ -101,7 +101,7 @@ export function LockerWorkspace() {
 
         {/* potrait 1 */}
         <Layer
-          src={`${A}/portrait.png`}
+          src={`${A}/portrait.webp`}
           alt="Polaroid portrait"
           z={4}
           style={figma(558, 377, 363, 242)}
@@ -111,7 +111,7 @@ export function LockerWorkspace() {
 
         {/* lamp */}
         <Layer
-          src={`${A}/lamp.png`}
+          src={`${A}/lamp.webp`}
           alt="Desk lamp"
           z={5}
           style={figma(-11.61, 499.41, 534.52, 353.56, "rotate(0.34deg)")}
@@ -119,7 +119,7 @@ export function LockerWorkspace() {
 
         {/* laptop 1 */}
         <Layer
-          src={`${A}/laptop.png`}
+          src={`${A}/laptop.webp`}
           alt="Laptop"
           z={6}
           style={figma(312, 523, 521, 347)}
@@ -129,7 +129,7 @@ export function LockerWorkspace() {
 
         {/* bottle */}
         <Layer
-          src={`${A}/bottle.png`}
+          src={`${A}/bottle.webp`}
           alt="Water bottle"
           z={7}
           style={figma(634.55, 560.71, 384.65, 254.43, "rotate(0.34deg)")}
@@ -137,18 +137,18 @@ export function LockerWorkspace() {
 
         {/* penholder 1 */}
         <Layer
-          src={`${A}/penholder.png`}
+          src={`${A}/penholder.webp`}
           alt="Pen holder"
           z={8}
           style={figma(527, 815, 267, 178)}
         />
 
         {/* notepad 1 */}
-        <Layer src={`${A}/notepad.png`} alt="Notepad" z={9} style={figma(225, 647, 326, 217)} />
+        <Layer src={`${A}/notepad.webp`} alt="Notepad" z={9} style={figma(225, 647, 326, 217)} />
 
         {/* plant 1 */}
         <Layer
-          src={`${A}/plant.png`}
+          src={`${A}/plant.webp`}
           alt="Desk plant"
           z={10}
           style={figma(558, 631, 384, 256)}
@@ -158,29 +158,29 @@ export function LockerWorkspace() {
 
         {/* camera */}
         <Layer
-          src={`${A}/camera.png`}
+          src={`${A}/camera.webp`}
           alt="Camera"
           z={11}
           style={figma(87, 798, 382.17, 252.79, "rotate(0.34deg)")}
         />
 
         {/* books 1 */}
-        <Layer src={`${A}/books.png`} alt="Books" z={12} style={figma(92, 120, 376, 251)} />
+        <Layer src={`${A}/books.webp`} alt="Books" z={12} style={figma(92, 120, 376, 251)} />
 
         {/* headphone 1 */}
         <Layer
-          src={`${A}/headphone.png`}
+          src={`${A}/headphone.webp`}
           alt="Headphones"
           z={13}
           style={figma(245, 100, 363, 243, "matrix(-1, 0, 0, 1, 0, 0)")}
         />
 
         {/* mug 1 */}
-        <Layer src={`${A}/mug.png`} alt="Coffee mug" z={14} style={figma(502, 112, 363, 242)} />
+        <Layer src={`${A}/mug.webp`} alt="Coffee mug" z={14} style={figma(502, 112, 363, 242)} />
 
         {/* calculator 1 */}
         <Layer
-          src={`${A}/calculator.png`}
+          src={`${A}/calculator.webp`}
           alt="Calculator"
           z={15}
           style={figma(625, 109, 328.75, 219.16, "rotate(-7.43deg)")}
@@ -188,17 +188,17 @@ export function LockerWorkspace() {
 
         {/* duck */}
         <Layer
-          src={`${A}/duck.png`}
+          src={`${A}/duck.webp`}
           alt="Rubber duck"
           z={16}
           style={figma(305, 835, 287.47, 190.15, "rotate(0.34deg)")}
         />
 
         {/* mini tv */}
-        <Layer src={`${A}/mini-tv.png`} alt="Mini TV" z={17} style={figma(627, 815, 333, 222)} />
+        <Layer src={`${A}/mini-tv.webp`} alt="Mini TV" z={17} style={figma(627, 815, 333, 222)} />
 
         {/* airpodes 1 */}
-        <Layer src={`${A}/airpodes.png`} alt="AirPods" z={18} style={figma(614, 907, 180, 120)} />
+        <Layer src={`${A}/airpodes.webp`} alt="AirPods" z={18} style={figma(614, 907, 180, 120)} />
       </figure>
 
       {/* Rectangle 1 — wide enough for text (165+239 − 152 = 252) */}

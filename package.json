@@ -23,7 +23,8 @@
     "mascot:stitch": "node scripts/stitch-mascot.mjs",
     "mascot:clean-bg": "node scripts/mascot-remove-bg.mjs",
     "mascot:optimize": "node scripts/optimize-mascot-sprites.mjs",
-    "mascot:normalize": "node scripts/normalize-sprite-strips.mjs"
+    "mascot:normalize": "node scripts/normalize-sprite-strips.mjs",
+    "locker:optimize": "node scripts/optimize-locker-assets.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
