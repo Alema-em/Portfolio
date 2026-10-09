@@ -1,4 +1,9 @@
-export type ProjectPreviewId = "brandforge" | "lamaos" | "marketmate" | "plant";
+export type ProjectPreviewId =
+  | "brandforge"
+  | "lamaos"
+  | "marketmate"
+  | "btfphotobooth"
+  | "plant";
 
 export type Project = {
   id: string;
@@ -113,9 +118,42 @@ export const PROJECTS: Project[] = [
       },
     ],
     preview: "marketmate",
-    image: "/assets/projects/marketmate.png",
+    image: "/assets/projects/marketmate-dashboard.png",
     liveUrl: "https://market-mate-beta.vercel.app",
     repoUrl: "https://github.com/Alema-em/MarketMate",
+  },
+  {
+    id: "btf-photobooth",
+    name: "BTF Photo Booth",
+    tagline: "A self photo studio for the first day that matters.",
+    category: "Product · Event Tech · Full Stack",
+    bg: "butter",
+    accent: "coral",
+    ink: "ink",
+    role: "Full-stack engineering · Product build for live events",
+    stack: ["Next.js", "React", "Tailwind", "Cloud storage"],
+    brief:
+      "Freshers Orientation needed more than flyers — a stall experience new students would keep and share.",
+    outcome:
+      "Shipped a live kiosk photobooth for BITS Tech Fest that composed branded strips with QR handoff — 84 strips went home on day one.",
+    bullets: [
+      {
+        title: "Problem",
+        body: "Orientation stalls fade fast; there was no durable, shareable memento from the first campus day.",
+      },
+      {
+        title: "What I built",
+        body: "A fullscreen Next.js kiosk: four shots, pick three, branded BTF strip compose, QR download, and Instagram story export.",
+      },
+      {
+        title: "Measurable result",
+        body: "Ran live at Freshers Orientation 2026 with 84 strips taken home — memories left the stall on phones, not on the laptop.",
+      },
+    ],
+    preview: "btfphotobooth",
+    image: "/assets/projects/btf-photobooth.png",
+    liveUrl: "https://btf-photobooth.vercel.app",
+    repoUrl: "https://github.com/Alema-em/btf-photobooth",
   },
   {
     id: "plant-inventory",
@@ -153,6 +191,7 @@ export const PROJECTS: Project[] = [
 export const PROJECT_IMAGES: Record<ProjectPreviewId, string> = {
   brandforge: "/assets/projects/brandforge.png",
   lamaos: "/assets/projects/lama-os.png",
-  marketmate: "/assets/projects/marketmate.png",
+  marketmate: "/assets/projects/marketmate-dashboard.png",
+  btfphotobooth: "/assets/projects/btf-photobooth.png",
   plant: "/assets/projects/plant-inventory.png",
 };

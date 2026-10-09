@@ -9,6 +9,7 @@ Live stack: React 19, TanStack Start, Motion, Tailwind CSS v4, deployed via Nitr
 - **BrandKit AI** — AI brand identity generator
 - **Lama OS** — personal productivity operating system
 - **MarketMate** — fintech portfolio tracker with AI copilot
+- **BTF Photo Booth** — live event kiosk photobooth for BITS Tech Fest
 - **PlantOS** — nursery inventory management
 
 ## Development

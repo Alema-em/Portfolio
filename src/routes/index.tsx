@@ -413,6 +413,8 @@ function FeaturedProject() {
   const shippedCount = PROJECTS.length;
   const liveCount = PROJECTS.filter((p) => !!p.liveUrl).length;
   const integrationCount = PROJECTS.reduce((sum, p) => sum + p.stack.length, 0);
+  const tapeNo = String(idx + 1).padStart(2, "0");
+  const tapeTotal = String(shippedCount).padStart(2, "0");
 
   return (
     <SectionReveal
@@ -429,7 +431,7 @@ function FeaturedProject() {
         <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
           <div>
             <div className="font-mono text-xs uppercase tracking-[0.25em] text-[var(--ink)]/60 mb-3">
-              Chapter 01 · Featured artefact · 0{idx + 1} / 04
+              Chapter 01 · Featured artefact · {tapeNo} / {tapeTotal}
             </div>
             <h2 className="font-display text-balance text-[clamp(2.25rem,5.5vw,4.5rem)] md:text-[clamp(2.75rem,6vw,5rem)] leading-[0.95]">
               From the locker: <span className="italic">a tape labelled</span>{" "}
@@ -452,7 +454,7 @@ function FeaturedProject() {
             </p>
           </div>
           <div className="font-mono text-xs uppercase tracking-wider bg-[var(--paper)] border-2 border-[var(--ink)] px-3 py-1.5">
-            0{idx + 1} / 04 unlocked
+            {tapeNo} / {tapeTotal} unlocked
           </div>
         </div>
 
@@ -479,7 +481,7 @@ function FeaturedProject() {
                   <span className="w-3 h-3 rounded-full bg-[var(--lime)] border border-[var(--ink)]" />
                 </div>
                 <div className="font-mono text-[10px] uppercase tracking-widest truncate">
-                  {project.id}.case — 0{idx + 1} / 04
+                  {project.id}.case — {tapeNo} / {tapeTotal}
                 </div>
                 <div className="flex items-center gap-1.5">
                   {project.liveUrl ? (
@@ -616,7 +618,9 @@ function FeaturedProject() {
                     transform: isActive ? "translate(-1px,-1px)" : "none",
                   }}
                 >
-                  <span className="block text-[9px] opacity-60">Tape · 0{i + 1}</span>
+                  <span className="block text-[9px] opacity-60">
+                    Tape · {String(i + 1).padStart(2, "0")}
+                  </span>
                   <span className="text-sm normal-case tracking-normal font-display">{p.name}</span>
                 </button>
               );
