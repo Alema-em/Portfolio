@@ -81,6 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: SITE.title },
       { property: "og:description", content: SITE.ogDescription },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE.url },
       { property: "og:image", content: absoluteUrl(SITE.ogImagePath) },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: SITE.title },
@@ -89,7 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      ...(SITE.url ? [{ rel: "canonical", href: SITE.url }] : []),
+      { rel: "canonical", href: SITE.url },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
