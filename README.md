@@ -1,8 +1,10 @@
 # Alema Emran — Portfolio
 
-Personal portfolio 
+Personal portfolio for software engineering internship recruiting (summer 2027).
 
-Live stack: React 19, TanStack Start, Motion, Tailwind CSS v4, deployed via Nitro (Cloudflare Workers).
+Live: [https://alema-em-portfolio.alema.workers.dev](https://alema-em-portfolio.alema.workers.dev)
+
+Stack: React 19, TanStack Start, Motion, Tailwind CSS v4, deployed via Nitro (Cloudflare Workers).
 
 ## Projects featured
 

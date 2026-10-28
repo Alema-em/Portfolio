@@ -103,12 +103,21 @@ export function Preloader() {
     }
   }, [done]);
 
+  const skipIntro = () => {
+    setProgress(100);
+    setPhase("blast");
+    window.dispatchEvent(new CustomEvent(PRELOADER_DONE_EVENT));
+    setDone(true);
+  };
+
   return (
     <AnimatePresence>
       {!done && (
         <motion.div
           key="preloader"
           data-preloader="active"
+          role="dialog"
+          aria-label="Level loading"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
@@ -188,13 +197,20 @@ export function Preloader() {
                     {statusLabel}
                     <motion.span
                       aria-hidden
-                      animate={{ opacity: [1, 0.15, 1] }}
+                      animate={reduce ? undefined : { opacity: [1, 0.15, 1] }}
                       transition={{ duration: 1, repeat: Infinity }}
                     >
                       …
                     </motion.span>
                   </motion.p>
                 </AnimatePresence>
+                <button
+                  type="button"
+                  onClick={skipIntro}
+                  className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--paper)]/35 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--paper)]/80 hover:border-[var(--lime)] hover:text-[var(--lime)] transition-colors"
+                >
+                  Skip intro →
+                </button>
               </div>
             </div>
           </div>

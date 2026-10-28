@@ -15,8 +15,17 @@ import { MagneticLink } from "@/components/effects/MagneticLink";
 import { SectionReveal } from "@/components/effects/SectionReveal";
 import { ChapterFlash } from "@/components/effects/ChapterFlash";
 import { CONTACT } from "@/data/contact";
-import { PROJECTS, PROJECT_IMAGES, type Project } from "@/data/projects";
+import {
+  EXPERIENCE_MORE,
+  EXPERIENCE_PRIMARY,
+  LEADERSHIP_MORE,
+  LEADERSHIP_PRIMARY,
+  statusStyle,
+  type RoleEntry,
+} from "@/data/experience";
+import { PROJECTS, PROJECT_IMAGES, projectStats, type Project } from "@/data/projects";
 import { SITE } from "@/data/site";
+import { SKILL_GROUPS, type SkillGroupId } from "@/data/skills";
 
 /** Toggle to swap between the illustrated PNG and the CSS locker diorama. */
 const USE_CSS_LOCKER = false;
@@ -24,7 +33,7 @@ const USE_CSS_LOCKER = false;
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: `${SITE.name} — ${SITE.tagline}` },
+      { title: SITE.title },
       { name: "description", content: SITE.description },
       { property: "og:title", content: SITE.title },
       { property: "og:description", content: SITE.ogDescription },
@@ -50,6 +59,12 @@ const heroFadeUp = {
 function Portfolio() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans overflow-x-hidden">
+      <a
+        href="#work"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-[var(--lime)] focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-widest focus:text-[var(--ink)]"
+      >
+        Skip to projects
+      </a>
       <Preloader />
       <MascotDirector />
       <Nav />
@@ -57,7 +72,8 @@ function Portfolio() {
       <ChapterFlash />
       <FeaturedProject />
       <TechIdentity />
-      <DeploymentLog />
+      <ExperienceSection />
+      <LeadershipSection />
       <Footer />
     </div>
   );
@@ -76,9 +92,10 @@ function Nav() {
   }, []);
 
   const links = [
-    ["Work", "#work"],
-    ["System", "#system"],
-    ["Log", "#log"],
+    ["Projects", "#work"],
+    ["Skills", "#system"],
+    ["Experience", "#experience"],
+    ["Leadership", "#leadership"],
     ["Contact", "#contact"],
   ] as const;
 
@@ -410,11 +427,9 @@ function FeaturedProject() {
   const [openCase, setOpenCase] = useState<string | null>(null);
   const project = PROJECTS.find((p) => p.id === activeId)!;
   const idx = PROJECTS.findIndex((p) => p.id === activeId);
-  const shippedCount = PROJECTS.length;
-  const liveCount = PROJECTS.filter((p) => !!p.liveUrl).length;
-  const integrationCount = PROJECTS.reduce((sum, p) => sum + p.stack.length, 0);
+  const { shipped, live, stackTags } = projectStats();
   const tapeNo = String(idx + 1).padStart(2, "0");
-  const tapeTotal = String(shippedCount).padStart(2, "0");
+  const tapeTotal = String(shipped).padStart(2, "0");
 
   return (
     <SectionReveal
@@ -449,7 +464,7 @@ function FeaturedProject() {
               </AnimatePresence>
             </h2>
             <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-[var(--ink)]/65">
-              {shippedCount} shipped projects · {liveCount} live demos · {integrationCount}+ stack
+              {shipped} shipped projects · {live} live demos · {stackTags} stack
               integrations
             </p>
           </div>
@@ -493,11 +508,7 @@ function FeaturedProject() {
                     >
                       Live
                     </a>
-                  ) : (
-                    <span className="font-mono text-[9px] uppercase tracking-widest px-2 py-1 border border-[var(--ink)] bg-[var(--paper)] text-[var(--ink)]/60">
-                      Demo req
-                    </span>
-                  )}
+                  ) : null}
                   <a
                     href={project.repoUrl}
                     target="_blank"
@@ -668,11 +679,7 @@ function ProjectLinks({ project }: { project: Project }) {
         >
           Live demo →
         </a>
-      ) : (
-        <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest px-3 py-2 bg-[var(--muted)] border-2 border-[var(--ink)] text-[var(--ink)]/75">
-          Demo on request
-        </span>
-      )}
+      ) : null}
       <a
         href={project.repoUrl}
         target="_blank"
@@ -786,7 +793,7 @@ function CaseStudyModal({
               <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-[10px] uppercase tracking-widest">
                 <InfoBlock k="Role" v={project.role} />
                 <InfoBlock k="Stack" v={project.stack.join(" · ")} />
-                <InfoBlock k="Stage" v="Active build / shipped" />
+                <InfoBlock k="Target" v={SITE.targetRole} />
               </div>
 
               <ProjectLinks project={project} />
@@ -809,6 +816,21 @@ function CaseStudyModal({
                     The outcome
                   </div>
                   <p className="mt-2 text-lg leading-relaxed">{project.outcome}</p>
+                </div>
+              </div>
+
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-[var(--paper)] border-[3px] border-[var(--ink)] rounded-2xl p-6">
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--ink)]/60">
+                    Architecture
+                  </div>
+                  <p className="mt-2 text-[var(--ink)]/85 leading-relaxed">{project.architecture}</p>
+                </div>
+                <div className="bg-[var(--paper)] border-[3px] border-[var(--ink)] rounded-2xl p-6">
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--ink)]/60">
+                    Measurable result
+                  </div>
+                  <p className="mt-2 text-[var(--ink)]/85 leading-relaxed">{project.measurable}</p>
                 </div>
               </div>
 
@@ -901,107 +923,9 @@ function Stat({
 
 /* ───────────────────────── TECHNICAL IDENTITY (SYSTEM PANEL) ───────────────────────── */
 
-type Category = "Languages" | "Backend" | "Engineering" | "Frontend" | "AI" | "Design & Media";
-
-const skills: Record<Category, { name: string; lvl: number }[]> = {
-  Languages: [
-    { name: "Java", lvl: 74 },
-    { name: "Python", lvl: 86 },
-    { name: "SQL", lvl: 72 },
-    { name: "C", lvl: 68 },
-    { name: "JavaScript", lvl: 90 },
-    { name: "TypeScript", lvl: 84 },
-  ],
-  Backend: [
-    { name: "Flask", lvl: 82 },
-    { name: "REST APIs", lvl: 84 },
-    { name: "MySQL", lvl: 78 },
-    { name: "Firebase / Firestore", lvl: 80 },
-    { name: "Node.js", lvl: 76 },
-    { name: "Git & GitHub", lvl: 88 },
-  ],
-  Engineering: [
-    { name: "Data Structures & Algorithms", lvl: 74 },
-    { name: "Object-Oriented Programming", lvl: 76 },
-    { name: "Database Management Systems", lvl: 76 },
-    { name: "API Design", lvl: 80 },
-    { name: "Operating Systems", lvl: 70 },
-    { name: "Computer Networks", lvl: 68 },
-    { name: "System Design", lvl: 72 },
-  ],
-  Frontend: [
-    { name: "React", lvl: 88 },
-    { name: "Next.js", lvl: 78 },
-    { name: "HTML", lvl: 95 },
-    { name: "CSS", lvl: 92 },
-    { name: "Tailwind", lvl: 92 },
-  ],
-  AI: [
-    { name: "OpenAI APIs", lvl: 82 },
-    { name: "Gemini APIs", lvl: 78 },
-    { name: "Ollama", lvl: 70 },
-    { name: "Hugging Face", lvl: 72 },
-    { name: "EasyOCR / ML pipelines", lvl: 74 },
-    { name: "Prompt Engineering", lvl: 85 },
-  ],
-  "Design & Media": [
-    { name: "Figma", lvl: 94 },
-    { name: "Adobe Illustrator", lvl: 82 },
-    { name: "Adobe Photoshop", lvl: 75 },
-    { name: "After Effects", lvl: 70 },
-    { name: "Canva", lvl: 90 },
-  ],
-};
-
-const categoryColor: Record<Category, string> = {
-  Languages: "coral",
-  Backend: "lime",
-  Engineering: "butter",
-  Frontend: "cobalt",
-  AI: "lilac",
-  "Design & Media": "coral",
-};
-
-/* Dual craft lanes — narrative panel (replaces tool grid). */
-const CRAFT_LANES = [
-  {
-    lane: "01",
-    title: "Engineering",
-    accent: "cobalt" as const,
-    blurb: "Backends, APIs and the systems that stay up after launch.",
-    beats: [
-      "Service layers with Flask, Firebase & SQL",
-      "React / Next fronts wired to real data",
-      "Docker, Git & deploy-ready workflows",
-      "AI pipelines integrated into product",
-    ],
-  },
-  {
-    lane: "02",
-    title: "Design",
-    accent: "coral" as const,
-    blurb: "Brand systems and interfaces — I design them and ship the code.",
-    beats: [
-      "Figma systems, components & handoff specs",
-      "Illustrator, Photoshop & After Effects",
-      "Campaign surfaces, motion & visual identity",
-      "Design → dev without losing the intent",
-    ],
-  },
-] as const;
-
-const craftAccentBorder: Record<(typeof CRAFT_LANES)[number]["accent"], string> = {
-  cobalt: "var(--cobalt)",
-  coral: "var(--coral)",
-};
-
-const craftAccentBg: Record<(typeof CRAFT_LANES)[number]["accent"], string> = {
-  cobalt: "rgba(74,124,255,0.08)",
-  coral: "rgba(255,107,107,0.1)",
-};
-
 function TechIdentity() {
-  const [active, setActive] = useState<Category>("Backend");
+  const [active, setActive] = useState<SkillGroupId>("Backend");
+  const group = SKILL_GROUPS.find((g) => g.id === active) ?? SKILL_GROUPS[0];
 
   return (
     <SectionReveal
@@ -1013,7 +937,6 @@ function TechIdentity() {
         data-mascot-anchor="lane-system"
         aria-hidden
       />
-      {/* grid bg */}
       <div
         aria-hidden
         className="absolute inset-0 opacity-[0.07]"
@@ -1031,91 +954,46 @@ function TechIdentity() {
               Chapter 02 · System panel
             </div>
             <h2 className="font-display text-balance text-[clamp(2.25rem,5.5vw,4.5rem)] md:text-[clamp(2.75rem,6vw,5rem)] leading-[0.95]">
-              Engineering &amp; <span className="italic text-[var(--butter)]">design</span>, one
-              stack.
+              Skills tied to <span className="italic text-[var(--butter)]">shipped</span> work.
             </h2>
             <p className="mt-4 max-w-xl text-[var(--paper)]/70">
-              I design the interface and build the system underneath — same person, same repo.
-              Browse skill categories; bars reflect how often each shows up in real work.
+              No percentage bars — each chip lists the featured project that uses it. Seeking a{" "}
+              {SITE.targetRole}.
             </p>
           </div>
           <div className="font-mono text-xs uppercase tracking-widest bg-[var(--paper)] text-[var(--ink)] px-3 py-1.5 border-2 border-[var(--lime)]">
-            HP 100 · Coffee 78%
+            {SITE.targetRole}
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Categories + Current Run */}
-          <div className="lg:col-span-3 flex flex-col gap-4">
-            <div className="flex lg:flex-col gap-2 flex-wrap">
-              {(Object.keys(skills) as Category[]).map((c) => {
-                const isActive = c === active;
-                return (
-                  <button
-                    key={c}
-                    onClick={() => setActive(c)}
-                    className="text-left px-4 py-3 border-2 rounded-xl font-mono text-xs uppercase tracking-widest transition-all"
-                    style={{
-                      borderColor: isActive
-                        ? `var(--${categoryColor[c]})`
-                        : "rgba(245,241,234,0.25)",
-                      background: isActive ? `var(--${categoryColor[c]})` : "transparent",
-                      color: isActive ? "var(--ink)" : "var(--paper)",
-                      boxShadow: isActive ? `5px 5px 0 0 var(--paper)` : "none",
-                    }}
-                  >
-                    <span className="block text-[10px] opacity-60">
-                      0{Object.keys(skills).indexOf(c) + 1}
-                    </span>
-                    {c}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* CURRENT RUN */}
-            <div className="rounded-2xl bg-[var(--lime)] text-[var(--ink)] border-[3px] border-[var(--paper)] p-4">
-              <div className="font-mono text-[10px] uppercase tracking-widest opacity-70">
-                Current run
-              </div>
-              <div className="mt-2 space-y-1 font-mono text-[11px]">
-                <div className="flex justify-between">
-                  <span>04 ·</span>
-                  <span>Featured projects</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>02 ·</span>
-                  <span>Craft lanes</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>06 ·</span>
-                  <span>Skill tracks</span>
-                </div>
-              </div>
-              <div className="mt-3 pt-3 border-t-2 border-[var(--ink)] font-mono text-[10px] uppercase tracking-widest opacity-70">
-                Currently shipping
-              </div>
-              <div className="font-display text-base leading-tight mt-0.5">PlantOS</div>
-              <div className="mt-3 font-mono text-[10px] uppercase tracking-widest opacity-70">
-                Next checkpoint
-              </div>
-              <div className="mt-1 h-2 bg-[var(--ink)]/15 rounded-full overflow-hidden">
-                <div className="h-full w-[72%] bg-[var(--ink)]" />
-              </div>
-              <div className="mt-1 text-[10px] font-sans opacity-80">
-                Internship-ready software engineer
-              </div>
-            </div>
+          <div className="lg:col-span-3 flex lg:flex-col gap-2 flex-wrap">
+            {SKILL_GROUPS.map((g, i) => {
+              const isActive = g.id === active;
+              return (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => setActive(g.id)}
+                  className="text-left px-4 py-3 border-2 rounded-xl font-mono text-xs uppercase tracking-widest transition-all min-h-[44px]"
+                  style={{
+                    borderColor: isActive ? `var(--${g.accent})` : "rgba(245,241,234,0.25)",
+                    background: isActive ? `var(--${g.accent})` : "transparent",
+                    color: isActive ? "var(--ink)" : "var(--paper)",
+                    boxShadow: isActive ? `5px 5px 0 0 var(--paper)` : "none",
+                  }}
+                >
+                  <span className="block text-[10px] opacity-60">0{i + 1}</span>
+                  {g.id}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Skill grid */}
-          <div className="lg:col-span-6 lg:self-start bg-[var(--paper)] text-[var(--ink)] rounded-2xl border-[3px] border-[var(--paper)] p-5 md:p-6 relative">
+          <div className="lg:col-span-9 bg-[var(--paper)] text-[var(--ink)] rounded-2xl border-[3px] border-[var(--paper)] p-5 md:p-6">
             <div className="flex items-center justify-between mb-4 font-mono text-[10px] uppercase tracking-widest text-[var(--ink)]/60">
               <span>~/skills/{active.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and")}</span>
-              <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--coral)] animate-pulse" />
-                live
-              </span>
+              <span>{group.chips.length} chips</span>
             </div>
             <AnimatePresence mode="wait">
               <motion.div
@@ -1124,199 +1002,24 @@ function TechIdentity() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                className="flex flex-wrap gap-2"
               >
-                {skills[active].map((s) => (
+                {group.chips.map((chip) => (
                   <div
-                    key={s.name}
-                    className="text-left border-2 border-[var(--ink)] p-3 rounded-lg bg-[var(--paper)]"
+                    key={chip.name}
+                    className="border-2 border-[var(--ink)] rounded-xl px-3 py-2.5 bg-[var(--paper)] max-w-full"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{s.name}</span>
-                      <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--ink)]/45">
-                        {s.lvl}%
-                      </span>
-                    </div>
-                    <div className="mt-2 h-1.5 bg-[var(--ink)]/10 rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${s.lvl}%` }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="h-full"
-                        style={{ background: `var(--${categoryColor[active]})` }}
-                      />
-                    </div>
-                    <div className="mt-1 flex justify-between font-mono text-[10px] tracking-wider text-[var(--ink)]/60">
-                      <span>In rotation</span>
-                      <span>{s.lvl >= 85 ? "daily" : s.lvl >= 70 ? "often" : "building"}</span>
+                    <div className="font-medium text-sm">{chip.name}</div>
+                    <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[var(--ink)]/55">
+                      {chip.projects.join(" · ")}
                     </div>
                   </div>
                 ))}
               </motion.div>
             </AnimatePresence>
-
-            <div className="mt-4 pt-4 border-t-2 border-[var(--ink)]/12 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="border-2 border-[var(--ink)] rounded-lg p-3">
-                <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50">
-                  ~/focus
-                </div>
-                <div className="mt-1.5 font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/65">
-                  Current focus
-                </div>
-                <ul className="mt-2 space-y-1 font-mono text-[11px] leading-snug">
-                  {[
-                    "Backend & API design",
-                    "Design systems & handoff",
-                    "Data & ML pipelines",
-                    "End-to-end delivery",
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-1.5">
-                      <span className="text-[var(--cobalt)] shrink-0">&gt;</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="border-2 border-[var(--ink)] rounded-lg p-3">
-                <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50">
-                  ~/learning
-                </div>
-                <div className="mt-1.5 font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/65">
-                  Now learning
-                </div>
-                <ul className="mt-2 space-y-1 font-mono text-[11px] leading-snug">
-                  {["Docker", "AWS", "System Design", "Machine Learning"].map((item) => (
-                    <li key={item} className="flex items-start gap-1.5">
-                      <span className="text-[var(--coral)] shrink-0">~</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="border-2 border-[var(--ink)] rounded-lg p-3">
-                <div className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/50">
-                  ~/status
-                </div>
-                <div className="mt-1.5 font-mono text-[9px] uppercase tracking-widest text-[var(--ink)]/65">
-                  System status
-                </div>
-                <dl className="mt-2 space-y-1.5 font-mono text-[10px] leading-snug">
-                  <div className="flex justify-between gap-2">
-                    <dt className="text-[var(--ink)]/50">Target Role:</dt>
-                    <dd className="font-medium text-right">Software Engineer</dd>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <dt className="text-[var(--ink)]/50">Current Goal:</dt>
-                    <dd className="font-medium text-right">Full-stack + backend</dd>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <dt className="text-[var(--ink)]/50">Location:</dt>
-                    <dd className="font-medium text-right">UAE</dd>
-                  </div>
-                  <div>
-                    <div className="flex justify-between gap-2 mb-0.5">
-                      <dt className="text-[var(--ink)]/50">Curiosity:</dt>
-                      <dd>100%</dd>
-                    </div>
-                    <div className="h-1 bg-[var(--ink)]/10 rounded-full overflow-hidden">
-                      <div className="h-full w-full bg-[var(--cobalt)]" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between gap-2 mb-0.5">
-                      <dt className="text-[var(--ink)]/50">Coffee:</dt>
-                      <dd>78%</dd>
-                    </div>
-                    <div className="h-1 bg-[var(--ink)]/10 rounded-full overflow-hidden">
-                      <div className="h-full w-[78%] bg-[var(--coral)]" />
-                    </div>
-                  </div>
-                  <div className="flex justify-between gap-2 pt-0.5">
-                    <dt className="text-[var(--ink)]/50">Status:</dt>
-                    <dd className="flex items-center gap-1 font-medium">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--lime)] animate-pulse" />
-                      Building...
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-          {/* Craft lanes + Build Profile */}
-          <div className="lg:col-span-3 flex flex-col gap-4">
-            {/* DUAL CRAFT */}
-            <div className="rounded-2xl border-2 border-[var(--paper)]/30 p-4 flex flex-col gap-4">
-              <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--paper)]/70">
-                Dual craft
-              </div>
-              {CRAFT_LANES.map((lane) => (
-                <div
-                  key={lane.lane}
-                  className="rounded-xl border-l-[3px] pl-3 py-2.5"
-                  style={{
-                    borderLeftColor: craftAccentBorder[lane.accent],
-                    background: craftAccentBg[lane.accent],
-                  }}
-                >
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--paper)]/45">
-                      {lane.lane}
-                    </span>
-                    <span className="font-display text-base leading-tight">{lane.title}</span>
-                  </div>
-                  <p className="mt-1.5 text-[12px] leading-snug text-[var(--paper)]/75 font-sans">
-                    {lane.blurb}
-                  </p>
-                  <ul className="mt-2.5 space-y-1.5">
-                    {lane.beats.map((beat) => (
-                      <li
-                        key={beat}
-                        className="flex items-start gap-2 font-mono text-[10px] leading-snug text-[var(--paper)]/80"
-                      >
-                        <span
-                          style={{ color: craftAccentBorder[lane.accent] }}
-                          className="shrink-0"
-                        >
-                          —
-                        </span>
-                        <span>{beat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-
-            {/* BUILD PROFILE */}
-            <div className="rounded-2xl bg-[var(--coral)] text-[var(--ink)] border-[3px] border-[var(--paper)] p-4">
-              <div className="font-mono text-[10px] uppercase tracking-widest opacity-70">
-                Build profile
-              </div>
-              <div className="font-display text-lg leading-tight mt-0.5">
-                Software Engineer + Design Specialist
-              </div>
-              <div className="mt-3 pt-3 border-t-2 border-[var(--ink)] font-mono text-[10px] uppercase tracking-widest opacity-70">
-                Current role
-              </div>
-              <div className="font-display text-sm leading-tight mt-0.5">
-                Design &amp; Marketing Lead, Axiomaera
-              </div>
-              <div className="mt-3 pt-3 border-t-2 border-[var(--ink)] font-mono text-[10px] uppercase tracking-widest opacity-70">
-                Studying
-              </div>
-              <div className="font-display text-sm leading-tight mt-0.5">
-                B.E. Computer Science · BITS Pilani
-              </div>
-              <div className="mt-3 pt-3 border-t-2 border-[var(--ink)] font-mono text-[10px] uppercase tracking-widest opacity-70">
-                Specialty
-              </div>
-              <div className="font-display text-sm leading-tight mt-0.5">
-                Full-stack builds · brand systems · AI product surfaces
-              </div>
-            </div>
+            <p className="mt-5 font-mono text-[10px] uppercase tracking-widest text-[var(--ink)]/45">
+              Chips only list stack tags verified in featured projects.
+            </p>
           </div>
         </div>
       </div>
@@ -1324,197 +1027,86 @@ function TechIdentity() {
   );
 }
 
-/* ───────────────────────── DEPLOYMENT LOG ───────────────────────── */
+/* ───────────────────────── EXPERIENCE ───────────────────────── */
 
-type DeployStatus = "ACTIVE" | "COMPLETED" | "DEPLOYED";
-
-type Deployment = {
-  id: string;
-  org: string;
-  role: string;
-  duration: string;
-  status: DeployStatus;
-  accent: "lime" | "coral" | "butter" | "cobalt" | "lilac";
-  bullets: string[];
-  tools: string;
-};
-
-const DEPLOYMENTS: Deployment[] = [
-  {
-    id: "DEP-011",
-    org: "BTF",
-    role: "Events Head",
-    duration: "August 2026 — Present",
-    status: "ACTIVE",
-    accent: "lime",
-    bullets: [
-      "Leading end-to-end event planning for campus tech programming.",
-      "Coordinating ops, creative and logistics across live event cycles.",
-      "Keeping schedules tight while scaling volunteer execution.",
-    ],
-    tools: "Discord · Google Forms · Sheets · Instagram · Canva",
-  },
-  {
-    id: "DEP-010",
-    org: "Cyberthorn",
-    role: "Events Co-Lead",
-    duration: "September 2026 — Present",
-    status: "ACTIVE",
-    accent: "coral",
-    bullets: [
-      "Co-leading cyber-community events from brief to show day.",
-      "Aligning speakers, workshops and engagement touchpoints.",
-      "Supporting fast turnarounds across promo and operations.",
-    ],
-    tools: "Discord · CTFd · LinkedIn · Canva · CapCut",
-  },
-  {
-    id: "DEP-009",
-    org: "AGCOE",
-    role: "Research Lead — Blockchain",
-    duration: "September 2026 — Present",
-    status: "ACTIVE",
-    accent: "butter",
-    bullets: [
-      "Leading blockchain research direction for the AGCOE cohort.",
-      "Structuring research goals, reviews and knowledge sharing.",
-      "Bridging technical exploration with practical campus projects.",
-    ],
-    tools: "Research · Documentation · Prototyping",
-  },
-  {
-    id: "DEP-008",
-    org: "BITS Sports Fest",
-    role: "Digital & Creative Board Head",
-    duration: "September 2026 — Present",
-    status: "ACTIVE",
-    accent: "cobalt",
-    bullets: [
-      "Heading digital and creative board output for sports fest.",
-      "Directing brand systems across campaigns, media and on-ground.",
-      "Aligning designers under high-visibility festival deadlines.",
-    ],
-    tools: "Figma · Illustrator · Photoshop · After Effects · Canva",
-  },
-  {
-    id: "DEP-007",
-    org: "Axiomaera",
-    role: "Digital Media & Marketing Lead",
-    duration: "February 2026 — August 2026",
-    status: "COMPLETED",
-    accent: "lime",
-    bullets: [
-      "Led brand systems across web, social and campaign surfaces.",
-      "Shipped launch assets aligned with product and go-to-market.",
-      "Directed creative while keeping output fast and measurable.",
-      "Bridged design and engineering handoffs for on-brand releases.",
-    ],
-    tools: "Figma · Illustrator · After Effects · Canva",
-  },
-  {
-    id: "DEP-006",
-    org: "BSF Design Committee",
-    role: "Executive Member",
-    duration: "September 2025 — November 2025",
-    status: "COMPLETED",
-    accent: "coral",
-    bullets: [
-      "Directed sports festival visual identity across large campus programming.",
-      "Aligned designers under tight deadlines without visual drift.",
-      "Built reusable templates for faster recurring collateral.",
-    ],
-    tools: "Figma · Illustrator · Photoshop · After Effects · Canva",
-  },
-  {
-    id: "DEP-005",
-    org: "BTF",
-    role: "Creative Co-Lead",
-    duration: "September 2025 — November 2025",
-    status: "COMPLETED",
-    accent: "butter",
-    bullets: [
-      "Co-led brand refresh for a major student tech forum.",
-      "Mentored juniors on layout, type and presentation quality.",
-    ],
-    tools: "Figma · Illustrator · After Effects · CapCut",
-  },
-  {
-    id: "DEP-004",
-    org: "GDG On Campus",
-    role: "Creative Executive",
-    duration: "August 2025 — June 2026",
-    status: "DEPLOYED",
-    accent: "cobalt",
-    bullets: [
-      "Designed dev-community campaigns for approachable tech events.",
-      "Synced creative timelines with workshop and hackathon ops.",
-      "Maintained a lightweight system for fast chapter comms.",
-    ],
-    tools: "Canva · Illustrator · CapCut",
-  },
-  {
-    id: "DEP-003",
-    org: "Jashn",
-    role: "Creative Executive",
-    duration: "February 2025 — April 2025",
-    status: "COMPLETED",
-    accent: "lilac",
-    bullets: [
-      "Shipped festival creatives across print, digital and on-site.",
-      "Turned cultural themes into bold, readable visual directions.",
-      "Kept type hierarchy strong across high-visibility touchpoints.",
-    ],
-    tools: "Figma · Illustrator · Photoshop · After Effects · Canva",
-  },
-  {
-    id: "DEP-002",
-    org: "BSF",
-    role: "Creative Executive",
-    duration: "August 2024 — November 2024",
-    status: "COMPLETED",
-    accent: "coral",
-    bullets: [
-      "Produced campaign visuals across multiple festival tracks.",
-      "Iterated posters, stories and stage graphics under pressure.",
-    ],
-    tools: "Figma · Illustrator · Canva · After Effects",
-  },
-  {
-    id: "DEP-001",
-    org: "ICS",
-    role: "Digital Media Intern",
-    duration: "June 2024 — August 2024",
-    status: "DEPLOYED",
-    accent: "butter",
-    bullets: [
-      "Supported client-facing digital content and brand deliverables.",
-      "Handled editing, layout and asset prep for web and social.",
-      "Managed briefs, revisions and deadlines in a live pipeline.",
-      "Learned production discipline across feedback and handoff cycles.",
-    ],
-    tools: "Photoshop · Illustrator · Canva · CapCut",
-  },
-];
-
-const statusStyle: Record<DeployStatus, { color: string; label: string }> = {
-  ACTIVE: { color: "var(--lime)", label: "Status" },
-  COMPLETED: { color: "var(--butter)", label: "Status" },
-  DEPLOYED: { color: "var(--coral)", label: "Status" },
-};
-
-function DeploymentLog() {
+function RoleCard({ entry, index }: { entry: RoleEntry; index: number }) {
   const reduce = useReducedMotion();
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: timelineRef,
-    offset: ["start 0.85", "end 0.15"],
-  });
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-  const lineGlow = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.6]);
+  const alignLeft = index % 2 === 0;
 
   return (
+    <motion.article
+      initial={reduce ? false : { opacity: 0, y: 28 }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.55, delay: reduce ? 0 : index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+      className={`relative w-full md:w-[calc(50%-2rem)] ${
+        alignLeft ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"
+      }`}
+    >
+      <div
+        className="rounded-2xl border-2 border-[var(--paper)]/25 bg-[var(--paper)]/5 p-4 md:p-5 backdrop-blur-sm"
+        style={{ boxShadow: `6px 6px 0 0 var(--${entry.accent})` }}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-[9px] uppercase tracking-widest">
+          <span
+            className="px-2 py-0.5 border border-[var(--paper)]/20"
+            style={{ color: statusStyle[entry.status].color }}
+          >
+            {entry.status}
+          </span>
+          <span className="text-[var(--paper)]/40">{entry.duration}</span>
+        </div>
+        <h3 className="mt-3 font-display text-xl md:text-2xl leading-tight">{entry.org}</h3>
+        <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-[var(--paper)]/60">
+          {entry.role}
+        </p>
+        <div className="my-3 border-t border-[var(--paper)]/12" />
+        <p className="font-mono text-[9px] uppercase tracking-widest text-[var(--paper)]/45 mb-2">
+          Key contributions
+        </p>
+        <ul className="space-y-1.5">
+          {entry.bullets.map((bullet) => (
+            <li
+              key={bullet}
+              className="flex items-start gap-2 text-[13px] text-[var(--paper)]/78 leading-snug"
+            >
+              <span className="shrink-0" style={{ color: `var(--${entry.accent})` }}>
+                •
+              </span>
+              <span>{bullet}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="my-3 border-t border-[var(--paper)]/12" />
+        <p className="font-mono text-[9px] uppercase tracking-widest text-[var(--paper)]/45 mb-1">
+          Tools
+        </p>
+        <p className="font-mono text-[10px] text-[var(--paper)]/55 leading-relaxed">{entry.tools}</p>
+      </div>
+    </motion.article>
+  );
+}
+
+function RoleMore({ entries }: { entries: RoleEntry[] }) {
+  return (
+    <details className="mt-10 group rounded-2xl border-2 border-[var(--paper)]/20 bg-[var(--paper)]/5 p-4 md:p-5">
+      <summary className="cursor-pointer list-none font-mono text-xs uppercase tracking-widest text-[var(--lime)] flex items-center justify-between gap-3 min-h-[44px]">
+        <span>More · {entries.length} additional roles</span>
+        <span className="text-[var(--paper)]/50 group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <div className="mt-6 space-y-8">
+        {entries.map((entry, i) => (
+          <RoleCard key={entry.id} entry={entry} index={i} />
+        ))}
+      </div>
+    </details>
+  );
+}
+
+function ExperienceSection() {
+  return (
     <SectionReveal
-      id="log"
+      id="experience"
       className="relative px-4 sm:px-6 md:px-8 py-20 sm:py-24 md:py-32 bg-[var(--midnight)] text-[var(--paper)] overflow-hidden border-t-2 border-[var(--ink)]"
     >
       <div
@@ -1531,159 +1123,74 @@ function DeploymentLog() {
           backgroundSize: "48px 48px",
         }}
       />
-
       <div className="relative mx-auto max-w-7xl">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
           <div>
             <div className="font-mono text-xs uppercase tracking-[0.25em] text-[var(--lime)] mb-3">
-              Chapter 03 · Deployment log
+              Chapter 03 · Experience
             </div>
             <h2 className="font-display text-balance text-[clamp(2.25rem,5.5vw,4.5rem)] md:text-[clamp(2.75rem,6vw,5rem)] leading-[0.95]">
-              Career <span className="italic text-[var(--butter)]">deployments</span>.
+              Work <span className="italic text-[var(--butter)]">experience</span>.
             </h2>
             <p className="mt-4 max-w-xl text-[var(--paper)]/70">
-              A mission log of engineering and leadership roles — backend work, shipped products and
-              teams built along the way.
+              Roles where I shipped brand systems and digital product surfaces with engineering
+              handoffs.
             </p>
           </div>
           <div className="font-mono text-xs uppercase tracking-widest bg-[var(--paper)] text-[var(--ink)] px-3 py-1.5 border-2 border-[var(--lime)]">
-            {DEPLOYMENTS.length} Logged · Building
+            {EXPERIENCE_PRIMARY.length} primary
           </div>
         </div>
+        <div className="space-y-10 md:space-y-14">
+          {EXPERIENCE_PRIMARY.map((entry, i) => (
+            <RoleCard key={entry.id} entry={entry} index={i} />
+          ))}
+        </div>
+        <RoleMore entries={EXPERIENCE_MORE} />
+      </div>
+    </SectionReveal>
+  );
+}
 
-        <div ref={timelineRef} className="relative">
-          {/* Timeline track */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-0 bottom-0 hidden md:block w-px -translate-x-1/2 bg-[var(--paper)]/10"
-          />
-
-          {/* Scroll-driven line fill */}
-          {!reduce && (
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute left-1/2 top-0 hidden md:block w-px -translate-x-1/2 origin-top"
-              style={{
-                height: lineHeight,
-                opacity: lineGlow,
-                background:
-                  "linear-gradient(180deg, var(--lime) 0%, var(--cobalt) 45%, var(--coral) 100%)",
-                boxShadow: "0 0 12px rgba(215,255,53,0.35)",
-              }}
-            />
-          )}
-
-          <div className="space-y-10 md:space-y-14">
-            {DEPLOYMENTS.map((d, i) => {
-              const alignLeft = i % 2 === 0;
-              return (
-                <motion.article
-                  key={d.id}
-                  initial={reduce ? false : { opacity: 0, x: alignLeft ? -48 : 48, y: 32 }}
-                  whileInView={reduce ? undefined : { opacity: 1, x: 0, y: 0 }}
-                  viewport={{ once: true, margin: "-12%" }}
-                  transition={{
-                    duration: 0.65,
-                    delay: reduce ? 0 : i * 0.06,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className={`relative w-full md:w-[calc(50%-2rem)] ${
-                    alignLeft ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"
-                  }`}
-                >
-                  <motion.div
-                    className="rounded-2xl border-2 border-[var(--paper)]/25 bg-[var(--paper)]/5 p-4 md:p-5 backdrop-blur-sm"
-                    style={{ boxShadow: `6px 6px 0 0 var(--${d.accent})` }}
-                    whileHover={reduce ? undefined : { y: -3, transition: { duration: 0.2 } }}
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-[9px] uppercase tracking-widest">
-                      <span
-                        className="px-2 py-0.5 border border-[var(--paper)]/20"
-                        style={{ color: statusStyle[d.status].color }}
-                      >
-                        {d.status}
-                      </span>
-                      <span className="text-[var(--paper)]/40">{d.duration}</span>
-                    </div>
-
-                    <h3 className="mt-3 font-display text-xl md:text-2xl leading-tight">{d.org}</h3>
-                    <p className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-[var(--paper)]/60">
-                      {d.role}
-                    </p>
-
-                    <div className="my-3 border-t border-[var(--paper)]/12" />
-
-                    <p className="font-mono text-[9px] uppercase tracking-widest text-[var(--paper)]/45 mb-2">
-                      Key contributions
-                    </p>
-                    <ul className="space-y-1.5">
-                      {d.bullets.map((bullet) => (
-                        <li
-                          key={bullet}
-                          className="flex items-start gap-2 text-[13px] text-[var(--paper)]/78 leading-snug"
-                        >
-                          <span className="shrink-0" style={{ color: `var(--${d.accent})` }}>
-                            •
-                          </span>
-                          <span>{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="my-3 border-t border-[var(--paper)]/12" />
-
-                    <p className="font-mono text-[9px] uppercase tracking-widest text-[var(--paper)]/45 mb-1">
-                      Tools
-                    </p>
-                    <p className="font-mono text-[10px] text-[var(--paper)]/55 leading-relaxed">
-                      {d.tools}
-                    </p>
-                  </motion.div>
-
-                  <motion.div
-                    aria-hidden
-                    initial={reduce ? false : { scale: 0, opacity: 0 }}
-                    whileInView={reduce ? undefined : { scale: 1, opacity: 1 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 420,
-                      damping: 22,
-                      delay: reduce ? 0 : 0.12 + i * 0.06,
-                    }}
-                    className={`hidden md:block absolute top-8 z-10 h-3 w-3 ${
-                      alignLeft ? "-right-[calc(2rem+6px)]" : "-left-[calc(2rem+6px)]"
-                    }`}
-                  >
-                    <motion.span
-                      className="absolute inset-0 rounded-full border border-[var(--paper)]/40"
-                      animate={
-                        reduce
-                          ? undefined
-                          : {
-                              scale: [1, 1.8, 1],
-                              opacity: [0.5, 0, 0.5],
-                            }
-                      }
-                      transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
-                    />
-                    <span
-                      className="relative block h-3 w-3 rounded-full border-2 border-[var(--paper)]"
-                      style={{
-                        background: `var(--${d.accent})`,
-                        boxShadow: `0 0 10px var(--${d.accent})`,
-                      }}
-                    />
-                  </motion.div>
-                </motion.article>
-              );
-            })}
+function LeadershipSection() {
+  return (
+    <SectionReveal
+      id="leadership"
+      className="relative px-4 sm:px-6 md:px-8 py-20 sm:py-24 md:py-32 bg-[var(--midnight)] text-[var(--paper)] overflow-hidden border-t-2 border-[var(--ink)]"
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            "linear-gradient(var(--paper) 1px, transparent 1px), linear-gradient(90deg, var(--paper) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+        }}
+      />
+      <div className="relative mx-auto max-w-7xl">
+        <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
+          <div>
+            <div className="font-mono text-xs uppercase tracking-[0.25em] text-[var(--lime)] mb-3">
+              Chapter 04 · Leadership
+            </div>
+            <h2 className="font-display text-balance text-[clamp(2.25rem,5.5vw,4.5rem)] md:text-[clamp(2.75rem,6vw,5rem)] leading-[0.95]">
+              Campus <span className="italic text-[var(--butter)]">leadership</span>.
+            </h2>
+            <p className="mt-4 max-w-xl text-[var(--paper)]/70">
+              GDG On Campus, BITS Sports Fest, and BTF / Cyberthorn — plus earlier campus roles under
+              More.
+            </p>
+          </div>
+          <div className="font-mono text-xs uppercase tracking-widest bg-[var(--paper)] text-[var(--ink)] px-3 py-1.5 border-2 border-[var(--lime)]">
+            {LEADERSHIP_PRIMARY.length} primary
           </div>
         </div>
-
-        <div className="mt-14 font-mono text-[10px] uppercase tracking-widest text-[var(--paper)]/45 text-center">
-          {DEPLOYMENTS.length} deployments logged · end of transmission
+        <div className="space-y-10 md:space-y-14">
+          {LEADERSHIP_PRIMARY.map((entry, i) => (
+            <RoleCard key={entry.id} entry={entry} index={i} />
+          ))}
         </div>
+        <RoleMore entries={LEADERSHIP_MORE} />
       </div>
     </SectionReveal>
   );
@@ -1709,18 +1216,6 @@ function Footer() {
       value: "Alema-em",
       href: CONTACT.github,
       external: true,
-    },
-    {
-      label: CONTACT.phoneIndia.label,
-      value: CONTACT.phoneIndia.display,
-      href: CONTACT.phoneIndia.whatsapp,
-      external: true,
-    },
-    {
-      label: CONTACT.phoneDubai.label,
-      value: CONTACT.phoneDubai.display,
-      href: `tel:${CONTACT.phoneDubai.tel}`,
-      external: false,
     },
   ];
 
