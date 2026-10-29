@@ -1,35 +1,39 @@
 /**
- * Skill chips for the System panel — no percentage bars.
- * Each chip lists the featured project(s) that use it (from projects.ts).
+ * Skill chips for the System panel — full inventory, no percentage bars.
+ * Optional project tags when a featured project clearly uses the skill.
  */
 export type SkillGroupId =
   | "Languages"
   | "Backend"
+  | "Engineering"
   | "Frontend"
-  | "AI & Data"
-  | "Tooling";
+  | "AI"
+  | "Design & Media";
 
 export type SkillChip = {
   name: string;
-  projects: string[];
+  /** Featured projects that use this skill, when known */
+  projects?: string[];
 };
 
 export type SkillGroup = {
   id: SkillGroupId;
-  accent: "coral" | "lime" | "cobalt" | "lilac" | "butter";
+  accent: "coral" | "lime" | "butter" | "cobalt" | "lilac";
   chips: SkillChip[];
 };
 
-/** Verified against stack tags in src/data/projects.ts only. */
+/** Restored from the previous full skill grid (names only — no %). */
 export const SKILL_GROUPS: SkillGroup[] = [
   {
     id: "Languages",
     accent: "coral",
     chips: [
+      { name: "Java" },
       { name: "Python", projects: ["BrandKit AI", "PlantOS"] },
-      { name: "TypeScript", projects: ["Lama OS"] },
+      { name: "SQL", projects: ["PlantOS"] },
+      { name: "C" },
       { name: "JavaScript", projects: ["BrandKit AI"] },
-      // TODO: confirm Java / C / SQL project attribution before adding chips
+      { name: "TypeScript", projects: ["Lama OS"] },
     ],
   },
   {
@@ -37,9 +41,24 @@ export const SKILL_GROUPS: SkillGroup[] = [
     accent: "lime",
     chips: [
       { name: "Flask", projects: ["BrandKit AI", "PlantOS"] },
-      { name: "Firebase", projects: ["MarketMate"] },
+      { name: "REST APIs" },
       { name: "MySQL", projects: ["PlantOS"] },
-      { name: "Cloud storage", projects: ["BTF Photo Booth"] },
+      { name: "Firebase / Firestore", projects: ["MarketMate"] },
+      { name: "Node.js" },
+      { name: "Git & GitHub" },
+    ],
+  },
+  {
+    id: "Engineering",
+    accent: "butter",
+    chips: [
+      { name: "Data Structures & Algorithms" },
+      { name: "Object-Oriented Programming" },
+      { name: "Database Management Systems" },
+      { name: "API Design" },
+      { name: "Operating Systems" },
+      { name: "Computer Networks" },
+      { name: "System Design" },
     ],
   },
   {
@@ -48,27 +67,32 @@ export const SKILL_GROUPS: SkillGroup[] = [
     chips: [
       { name: "React", projects: ["Lama OS", "BTF Photo Booth"] },
       { name: "Next.js", projects: ["MarketMate", "BTF Photo Booth"] },
+      { name: "HTML" },
+      { name: "CSS" },
       { name: "Tailwind", projects: ["BTF Photo Booth"] },
-      { name: "Recharts", projects: ["MarketMate"] },
     ],
   },
   {
-    id: "AI & Data",
+    id: "AI",
     accent: "lilac",
     chips: [
+      { name: "OpenAI APIs" },
+      { name: "Gemini APIs", projects: ["MarketMate"] },
       { name: "Ollama", projects: ["BrandKit AI"] },
-      { name: "Gemini AI", projects: ["MarketMate"] },
-      { name: "EasyOCR", projects: ["PlantOS"] },
-      { name: "Pandas", projects: ["PlantOS"] },
+      { name: "Hugging Face" },
+      { name: "EasyOCR / ML pipelines", projects: ["PlantOS"] },
+      { name: "Prompt Engineering" },
     ],
   },
   {
-    id: "Tooling",
-    accent: "butter",
+    id: "Design & Media",
+    accent: "coral",
     chips: [
-      { name: "Local-first storage", projects: ["Lama OS"] },
-      { name: "Charts", projects: ["Lama OS"] },
-      // TODO: add Docker / AWS chips only after they appear in a shipped project stack
+      { name: "Figma" },
+      { name: "Adobe Illustrator" },
+      { name: "Adobe Photoshop" },
+      { name: "After Effects" },
+      { name: "Canva" },
     ],
   },
 ];

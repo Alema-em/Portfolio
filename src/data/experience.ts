@@ -11,7 +11,7 @@ export type RoleEntry = {
   tools: string;
 };
 
-/** Experience — primary (shown by default). */
+/** Experience — all roles shown (no collapsed More; keeps the section from looking thin). */
 export const EXPERIENCE_PRIMARY: RoleEntry[] = [
   {
     id: "EXP-001",
@@ -28,10 +28,6 @@ export const EXPERIENCE_PRIMARY: RoleEntry[] = [
     ],
     tools: "Figma · Illustrator · After Effects · Canva",
   },
-];
-
-/** Experience — collapsed under More. */
-export const EXPERIENCE_MORE: RoleEntry[] = [
   {
     id: "EXP-002",
     org: "ICS",
@@ -50,26 +46,15 @@ export const EXPERIENCE_MORE: RoleEntry[] = [
 ];
 
 /**
- * Leadership — primary (4 mains: GDG, BITS Sports Fest, BTF + Cyberthorn).
- * BTF and Cyberthorn are both primary under the BTF/Cyberthorn grouping.
+ * Leadership — primary:
+ * 1) BITS Sports Fest
+ * 2) BTF Events Head
+ * 3) Cyberthorn (ended)
+ * 4) AGCOE (kept visible, not hidden)
  */
 export const LEADERSHIP_PRIMARY: RoleEntry[] = [
   {
     id: "LEAD-001",
-    org: "GDG On Campus",
-    role: "Creative Executive",
-    duration: "August 2025 — June 2026",
-    status: "DEPLOYED",
-    accent: "cobalt",
-    bullets: [
-      "Designed dev-community campaigns for approachable tech events.",
-      "Synced creative timelines with workshop and hackathon ops.",
-      "Maintained a lightweight system for fast chapter comms.",
-    ],
-    tools: "Canva · Illustrator · CapCut",
-  },
-  {
-    id: "LEAD-002",
     org: "BITS Sports Fest",
     role: "Digital & Creative Board Head",
     duration: "September 2026 — Present",
@@ -83,7 +68,7 @@ export const LEADERSHIP_PRIMARY: RoleEntry[] = [
     tools: "Figma · Illustrator · Photoshop · After Effects · Canva",
   },
   {
-    id: "LEAD-003",
+    id: "LEAD-002",
     org: "BTF",
     role: "Events Head",
     duration: "August 2026 — Present",
@@ -97,25 +82,21 @@ export const LEADERSHIP_PRIMARY: RoleEntry[] = [
     tools: "Discord · Google Forms · Sheets · Instagram · Canva",
   },
   {
-    id: "LEAD-004",
+    id: "LEAD-003",
     org: "Cyberthorn",
     role: "Events Co-Lead",
-    duration: "September 2026 — Present",
-    status: "ACTIVE",
+    duration: "September 2026 — October 2026",
+    status: "COMPLETED",
     accent: "coral",
     bullets: [
-      "Co-leading cyber-community events from brief to show day.",
-      "Aligning speakers, workshops and engagement touchpoints.",
-      "Supporting fast turnarounds across promo and operations.",
+      "Co-led cyber-community events from brief to show day.",
+      "Aligned speakers, workshops and engagement touchpoints.",
+      "Supported fast turnarounds across promo and operations.",
     ],
     tools: "Discord · CTFd · LinkedIn · Canva · CapCut",
   },
-];
-
-/** Leadership — collapsed under More. */
-export const LEADERSHIP_MORE: RoleEntry[] = [
   {
-    id: "LEAD-005",
+    id: "LEAD-004",
     org: "AGCOE",
     role: "Research Lead — Blockchain",
     duration: "September 2026 — Present",
@@ -128,8 +109,12 @@ export const LEADERSHIP_MORE: RoleEntry[] = [
     ],
     tools: "Research · Documentation · Prototyping",
   },
+];
+
+/** Leadership — additional roles (GDG last). */
+export const LEADERSHIP_MORE: RoleEntry[] = [
   {
-    id: "LEAD-006",
+    id: "LEAD-005",
     org: "BSF Design Committee",
     role: "Executive Member",
     duration: "September 2025 — November 2025",
@@ -143,7 +128,7 @@ export const LEADERSHIP_MORE: RoleEntry[] = [
     tools: "Figma · Illustrator · Photoshop · After Effects · Canva",
   },
   {
-    id: "LEAD-007",
+    id: "LEAD-006",
     org: "BTF",
     role: "Creative Co-Lead",
     duration: "September 2025 — November 2025",
@@ -156,7 +141,7 @@ export const LEADERSHIP_MORE: RoleEntry[] = [
     tools: "Figma · Illustrator · After Effects · CapCut",
   },
   {
-    id: "LEAD-008",
+    id: "LEAD-007",
     org: "Jashn",
     role: "Creative Executive",
     duration: "February 2025 — April 2025",
@@ -170,7 +155,7 @@ export const LEADERSHIP_MORE: RoleEntry[] = [
     tools: "Figma · Illustrator · Photoshop · After Effects · Canva",
   },
   {
-    id: "LEAD-009",
+    id: "LEAD-008",
     org: "BSF",
     role: "Creative Executive",
     duration: "August 2024 — November 2024",
@@ -181,6 +166,20 @@ export const LEADERSHIP_MORE: RoleEntry[] = [
       "Iterated posters, stories and stage graphics under pressure.",
     ],
     tools: "Figma · Illustrator · Canva · After Effects",
+  },
+  {
+    id: "LEAD-009",
+    org: "GDG On Campus",
+    role: "Creative Executive",
+    duration: "August 2025 — June 2026",
+    status: "DEPLOYED",
+    accent: "cobalt",
+    bullets: [
+      "Designed dev-community campaigns for approachable tech events.",
+      "Synced creative timelines with workshop and hackathon ops.",
+      "Maintained a lightweight system for fast chapter comms.",
+    ],
+    tools: "Canva · Illustrator · CapCut",
   },
 ];
 

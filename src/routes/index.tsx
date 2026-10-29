@@ -16,7 +16,6 @@ import { SectionReveal } from "@/components/effects/SectionReveal";
 import { ChapterFlash } from "@/components/effects/ChapterFlash";
 import { CONTACT } from "@/data/contact";
 import {
-  EXPERIENCE_MORE,
   EXPERIENCE_PRIMARY,
   LEADERSHIP_MORE,
   LEADERSHIP_PRIMARY,
@@ -954,11 +953,11 @@ function TechIdentity() {
               Chapter 02 · System panel
             </div>
             <h2 className="font-display text-balance text-[clamp(2.25rem,5.5vw,4.5rem)] md:text-[clamp(2.75rem,6vw,5rem)] leading-[0.95]">
-              Skills tied to <span className="italic text-[var(--butter)]">shipped</span> work.
+              Skills in <span className="italic text-[var(--butter)]">rotation</span>.
             </h2>
             <p className="mt-4 max-w-xl text-[var(--paper)]/70">
-              No percentage bars — each chip lists the featured project that uses it. Seeking a{" "}
-              {SITE.targetRole}.
+              Full stack across engineering and design — no percentage bars. Project tags appear when
+              a featured build uses that skill. Seeking a {SITE.targetRole}.
             </p>
           </div>
           <div className="font-mono text-xs uppercase tracking-widest bg-[var(--paper)] text-[var(--ink)] px-3 py-1.5 border-2 border-[var(--lime)]">
@@ -1010,16 +1009,15 @@ function TechIdentity() {
                     className="border-2 border-[var(--ink)] rounded-xl px-3 py-2.5 bg-[var(--paper)] max-w-full"
                   >
                     <div className="font-medium text-sm">{chip.name}</div>
-                    <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[var(--ink)]/55">
-                      {chip.projects.join(" · ")}
-                    </div>
+                    {chip.projects && chip.projects.length > 0 ? (
+                      <div className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[var(--ink)]/55">
+                        {chip.projects.join(" · ")}
+                      </div>
+                    ) : null}
                   </div>
                 ))}
               </motion.div>
             </AnimatePresence>
-            <p className="mt-5 font-mono text-[10px] uppercase tracking-widest text-[var(--ink)]/45">
-              Chips only list stack tags verified in featured projects.
-            </p>
           </div>
         </div>
       </div>
@@ -1138,7 +1136,7 @@ function ExperienceSection() {
             </p>
           </div>
           <div className="font-mono text-xs uppercase tracking-widest bg-[var(--paper)] text-[var(--ink)] px-3 py-1.5 border-2 border-[var(--lime)]">
-            {EXPERIENCE_PRIMARY.length} primary
+            {EXPERIENCE_PRIMARY.length} roles
           </div>
         </div>
         <div className="space-y-10 md:space-y-14">
@@ -1146,7 +1144,6 @@ function ExperienceSection() {
             <RoleCard key={entry.id} entry={entry} index={i} />
           ))}
         </div>
-        <RoleMore entries={EXPERIENCE_MORE} />
       </div>
     </SectionReveal>
   );
@@ -1177,8 +1174,8 @@ function LeadershipSection() {
               Campus <span className="italic text-[var(--butter)]">leadership</span>.
             </h2>
             <p className="mt-4 max-w-xl text-[var(--paper)]/70">
-              GDG On Campus, BITS Sports Fest, and BTF / Cyberthorn — plus earlier campus roles under
-              More.
+              BITS Sports Fest, BTF, Cyberthorn, and AGCOE up front — earlier campus roles under More
+              (GDG last).
             </p>
           </div>
           <div className="font-mono text-xs uppercase tracking-widest bg-[var(--paper)] text-[var(--ink)] px-3 py-1.5 border-2 border-[var(--lime)]">
